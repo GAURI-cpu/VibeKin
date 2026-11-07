@@ -1,0 +1,214 @@
+.theme-button {
+  position: fixed;
+  top: 21px;
+  left: 16px;
+  z-index: 6;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--paper-raised) 74%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow: 0 10px 28px -18px #6d4a3c80;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 220ms cubic-bezier(0.3, 1.9, 0.5, 1),
+    background-color 400ms ease,
+    color 400ms ease;
+}
+
+.theme-button:hover {
+  transform: scale(1.05, 0.96);
+}
+
+.theme-button:active {
+  transform: scale(1.1, 0.88);
+  transition-duration: 60ms;
+}
+
+.theme-button i {
+  width: 20px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* The drawer floats on the left, leaving the hero visible so themes preview live. */
+.theme-drawer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+/* No tint behind the drawer, so the theme preview shows its true colours. */
+.theme-drawer::backdrop {
+  background: transparent;
+}
+
+.theme-panel {
+  width: min(100%, 340px);
+  height: fit-content;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper-raised);
+  box-shadow: 0 24px 50px -24px #6d4a3c80;
+  transform-origin: 0 40px;
+}
+
+.theme-drawer[open] .theme-panel {
+  animation: theme-slide 320ms cubic-bezier(0.3, 1.3, 0.5, 1) both;
+}
+
+.theme-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+.theme-header h2 {
+  margin: 0;
+  font: 400 1.6rem/1 var(--display);
+}
+
+.theme-close {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 14px;
+  background: var(--wash);
+  color: inherit;
+  cursor: pointer;
+}
+
+.theme-close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.theme-groups,
+.theme-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.theme-group + .theme-group {
+  border-top: 1.5px solid var(--line);
+}
+
+.theme-group-button {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  font: 600 1.08rem/1.2 var(--body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.theme-group-button:hover {
+  background: var(--wash);
+}
+
+.theme-group-button[aria-expanded='true'] .nav-caret {
+  transform: rotate(180deg);
+}
+
+/* Animating grid rows from 0fr to 1fr opens to the content's real height. */
+.theme-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms cubic-bezier(0.3, 1.1, 0.5, 1);
+}
+
+.theme-reveal[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.theme-reveal-body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.theme-reveal[data-open] .theme-reveal-body {
+  padding-bottom: 8px;
+}
+
+.theme-empty {
+  margin: 0;
+  padding: 4px 10px 8px;
+  color: var(--ink-soft);
+  font: 400 0.84rem/1.4 var(--mono);
+}
+
+.theme-item {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 12px;
+  color: inherit;
+  font: 500 1rem/1.2 var(--body);
+  text-decoration: none;
+}
+
+.theme-item:hover {
+  background: var(--wash);
+}
+
+/* The panel clips overflow, so focus rings sit inside these rows. */
+.theme-group-button:focus-visible,
+.theme-item:focus-visible,
+.theme-close:focus-visible {
+  outline-offset: -3px;
+}
+
+@keyframes theme-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-24px) scale(0.97);
+  }
+}
+
+@media (max-width: 860px) {
+  .theme-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+}
