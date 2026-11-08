@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { MOODS } from '../hero/vibes'
+import { followLink } from '../router'
 import { NAV_CTA, NAV_ITEMS, isMenu, type NavMenu } from './navConfig'
 import './navbar.css'
 
@@ -72,7 +73,10 @@ function MenuBody({ menu, moodId, onChoose, onNavigate }: {
         <ul className="nav-menu-links">
           {menu.links.map((link) => (
             <li key={link.href}>
-              <a href={link.href} onClick={onNavigate}>
+              <a href={link.href} onClick={(event) => {
+                onNavigate()
+                followLink(event)
+              }}>
                 <strong>{link.label}</strong>
                 {link.description && <span>{link.description}</span>}
               </a>
@@ -160,7 +164,7 @@ export function Navbar({ moodId, onMoodChange }: NavbarProps) {
   return (
     <header className="navbar" data-hidden={hidden || undefined}>
       <nav ref={navRef} className="navbar-inner" aria-label="Main">
-        <a className="wordmark" href="/">
+        <a className="wordmark" href="/" onClick={followLink}>
           <img src="/vibekin-icon.svg" alt="" width="36" height="36" />
           Vibekin
         </a>
@@ -247,7 +251,7 @@ export function Navbar({ moodId, onMoodChange }: NavbarProps) {
         </ul>
 
         <div className="nav-end">
-          <a className="nav-cta" href={NAV_CTA.href}>
+          <a className="nav-cta" href={NAV_CTA.href} onClick={followLink}>
             {NAV_CTA.label}
           </a>
           <button
@@ -272,12 +276,18 @@ export function Navbar({ moodId, onMoodChange }: NavbarProps) {
                   <MenuBody menu={item} moodId={moodId} onChoose={chooseVibe} onNavigate={closeEverything} />
                 </div>
               ) : (
-                <a key={item.label} className="nav-sheet-link" href={item.href} onClick={closeEverything}>
+                <a key={item.label} className="nav-sheet-link" href={item.href} onClick={(event) => {
+                  closeEverything()
+                  followLink(event)
+                }}>
                   {item.label}
                 </a>
               ),
             )}
-            <a className="nav-cta nav-sheet-cta" href={NAV_CTA.href} onClick={closeEverything}>
+            <a className="nav-cta nav-sheet-cta" href={NAV_CTA.href} onClick={(event) => {
+              closeEverything()
+              followLink(event)
+            }}>
               {NAV_CTA.label}
             </a>
           </div>

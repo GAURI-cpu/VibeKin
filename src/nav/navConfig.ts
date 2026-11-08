@@ -24,7 +24,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Library',
     showVibes: true,
     links: [
-      { label: 'Backgrounds', href: '#backgrounds', description: 'Animated scenes to put behind your page' },
+      { label: 'Backgrounds', href: '/#library', description: 'Animated scenes to put behind your page' },
       { label: 'Templates', href: '#templates', description: 'Full page layouts ready to restyle' },
     ],
   },
@@ -33,4 +33,4 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export const NAV_CTA: NavLink = { label: 'Browse library', href: '#library' }
+export const NAV_CTA: NavLink = { label: 'Browse library', href: '/#library' }

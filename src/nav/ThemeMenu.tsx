@@ -1,4 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { makePoster } from '../lib/posters'
+import { followLink } from '../router'
 import { THEME_GROUPS } from './themes'
 import './themeMenu.css'
 
@@ -6,6 +8,19 @@ export function ThemeMenu() {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [openGroup, setOpenGroup] = useState('')
+  // A still frame for the card thumbnail, painted once the drawer first opens.
+  const [posters, setPosters] = useState<Record<string, string>>({})
+  const painted = useRef(false)
+
+  useEffect(() => {
+    if (!isOpen || painted.current) return
+    painted.current = true
+    for (const group of THEME_GROUPS) {
+      if (!group.card) continue
+      const label = group.label
+      void makePoster(group.card.poster, 240, 150).then((url) => setPosters((current) => ({ ...current, [label]: url })))
+    }
+  }, [isOpen])
 
   return (
     <>
@@ -54,6 +69,33 @@ export function ThemeMenu() {
 
           <ul className="theme-groups">
             {THEME_GROUPS.map((group) => {
+              if (group.card) {
+                const card = group.card
+                return (
+                  <li key={group.label} className="theme-group">
+                    <a
+                      className="theme-card"
+                      href={card.href}
+                      onClick={(event) => {
+                        // Opens the type's own page; it never touches the current page's background.
+                        dialogRef.current?.close()
+                        followLink(event)
+                      }}
+                    >
+                      <span className="theme-card-thumb" aria-hidden="true">
+                        {posters[group.label] && <img src={posters[group.label]} alt="" draggable={false} />}
+                      </span>
+                      <span className="theme-card-text">
+                        <span className="theme-card-title">{group.label}</span>
+                        <span className="theme-card-subtitle">{card.subtitle}</span>
+                      </span>
+                      <svg className="theme-card-arrow" viewBox="0 0 12 12" aria-hidden="true">
+                        <path d="M4.5 2.5 8 6l-3.5 3.5" />
+                      </svg>
+                    </a>
+                  </li>
+                )
+              }
               const expanded = openGroup === group.label
               return (
                 <li key={group.label} className="theme-group">

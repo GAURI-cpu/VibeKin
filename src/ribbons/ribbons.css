@@ -1,0 +1,78 @@
+/* Text over the ribbons: light on dark palettes, #2a1d24 on Cream. */
+.ribbons-stage .ribbons-copy {
+  color: #f6f3ff;
+  text-shadow: 0 2px 22px #000a;
+}
+
+.ribbons-stage[data-sky='light'] .ribbons-copy {
+  color: #2a1d24;
+  text-shadow: 0 1px 18px #f6efe4cc;
+}
+
+/* Only animate the text colour after first paint, so the first load never flashes. */
+.ribbons-stage[data-animate] .ribbons-copy {
+  transition: color 600ms ease, text-shadow 600ms ease;
+}
+
+.ribbons-copy h1 {
+  max-width: 14ch;
+  margin-inline: auto;
+  font-size: clamp(1.9rem, 5.6vw, 3.6rem);
+  line-height: 1.02;
+}
+
+/* Split swatches for two-colour palettes, with 44px targets. */
+.color-rail-swatch--split {
+  width: 44px;
+  height: 44px;
+}
+
+.color-rail-swatch--split[aria-pressed='true'] {
+  border-color: var(--ink);
+  transform: scale(1.08);
+}
+
+@media (max-width: 767px) {
+  .color-rail--labelled {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .color-rail-swatch--split {
+    flex: none;
+  }
+}
+
+.ribbons-sliders {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  width: min(100%, 836px);
+}
+
+.ribbons-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink-soft);
+  font: 500 0.88rem/1 var(--body);
+}
+
+.ribbons-slider input {
+  width: clamp(110px, 22vw, 180px);
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+.ribbons-slider input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}

@@ -1,0 +1,8 @@
+/* The sky colour shows while the canvas starts up. */
+.constellation-stage {
+  background: #050816;
+}
+
+.constellation-controls {
+  width: min(92vw, 460px);
+}

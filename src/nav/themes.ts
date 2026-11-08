@@ -1,12 +1,24 @@
+import { GALAXY_COUNT } from '../lib/galaxy'
+import type { PosterKey } from '../lib/posters'
+
 export type BackgroundTemplate = {
   label: string
   /** Where the template opens, for example '/library/coder/matrix-rain'. */
   href: string
 }
 
+/** A type that opens its own page instead of expanding in the drawer. */
+export type ThemeCard = {
+  href: string
+  subtitle: string
+  /** Which background paints the still thumbnail. */
+  poster: PosterKey
+}
+
 export type ThemeGroup = {
   label: string
   templates: BackgroundTemplate[]
+  card?: ThemeCard
 }
 
 /**
@@ -15,10 +27,14 @@ export type ThemeGroup = {
  *   templates: [{ label: 'Matrix rain', href: '/library/coder/matrix-rain' }],
  */
 export const THEME_GROUPS: ThemeGroup[] = [
-  { label: 'Aesthetic & Simple', templates: [] },
+  {
+    label: 'Aesthetic & Simple',
+    templates: [],
+    card: { href: '/ribbons', subtitle: '1 background', poster: 'WaveRibbons' },
+  },
   { label: 'Coder', templates: [] },
   { label: 'Glitter', templates: [] },
-  { label: 'Galaxy', templates: [] },
+  { label: 'Galaxy', templates: [], card: { href: '/galaxy', subtitle: `${GALAXY_COUNT} backgrounds`, poster: 'Aurora' } },
   { label: '3D', templates: [] },
   { label: 'Luxury', templates: [] },
   { label: 'Playful', templates: [] },

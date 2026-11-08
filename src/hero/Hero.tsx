@@ -148,7 +148,7 @@ export function Hero({ moodId, onMoodChange, dim }: HeroProps) {
   }
 
   return (
-    <main>
+    <>
       <section ref={heroRef} className="hero" data-scene-failed={sceneFailed || undefined}>
         <canvas ref={backdropRef} className="hero-backdrop" aria-hidden="true" />
         <div ref={sceneHostRef} className="hero-scene" aria-hidden="true" />
@@ -204,6 +204,6 @@ export function Hero({ moodId, onMoodChange, dim }: HeroProps) {
           </p>
         </div>
       </section>
-    </main>
+    </>
   )
 }

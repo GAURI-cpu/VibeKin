@@ -1,0 +1,328 @@
+:root {
+  --galaxy-display: 'Fredoka', var(--body);
+}
+
+/* ---------- /galaxy gallery: plain cozy paper ---------- */
+
+.galaxy-gallery {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 104px 16px 96px;
+}
+
+@media (min-width: 640px) {
+  .galaxy-gallery {
+    padding: 112px 32px 120px;
+  }
+}
+
+.galaxy-back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  margin-left: -14px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font: 600 1rem/1 var(--body);
+  text-decoration: none;
+}
+
+.galaxy-back-link:hover {
+  background: var(--wash);
+  color: var(--ink);
+}
+
+.galaxy-gallery-header {
+  margin: 24px 0 36px;
+  padding-right: 56px;
+}
+
+.galaxy-gallery-header h1 {
+  margin: 0 0 10px;
+  font: 600 clamp(2.6rem, 7vw, 4.2rem)/1 var(--galaxy-display);
+  letter-spacing: -0.01em;
+}
+
+.galaxy-gallery-header p {
+  margin: 0;
+  color: var(--ink-soft);
+  font: 400 1.1rem/1.45 var(--body);
+}
+
+.galaxy-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 1023px) {
+  .galaxy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .galaxy-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.galaxy-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 10px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 32px;
+  background: var(--paper-raised);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 260ms cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 260ms ease;
+}
+
+.galaxy-box:hover,
+.galaxy-box:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 40px -26px #6d4a3c99;
+}
+
+.galaxy-box:active {
+  transform: translateY(-2px) scale(0.985);
+  transition-duration: 80ms;
+}
+
+.galaxy-box:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.galaxy-box-preview {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #0d0a1f;
+}
+
+.galaxy-box-preview img,
+.galaxy-box-live {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galaxy-box-live {
+  animation: galaxy-fade-in 300ms ease both;
+}
+
+.galaxy-box-name {
+  padding: 0 8px;
+  font: 600 1.25rem/1.2 var(--galaxy-display);
+}
+
+.galaxy-box-tag {
+  padding: 0 8px;
+  color: var(--ink-soft);
+  font: 400 0.85rem/1.3 var(--mono);
+}
+
+.galaxy-not-found {
+  text-align: left;
+}
+
+@keyframes galaxy-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- /galaxy/:id detail: one background in a medium box, centred ---------- */
+
+.galaxy-detail {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 108px 16px 56px;
+}
+
+.galaxy-detail-back {
+  align-self: center;
+  width: min(100%, 836px);
+  margin-left: 0;
+}
+
+.galaxy-detail-back:hover {
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* The name and line sit on top of the background, like a real hero would. */
+.galaxy-detail-copy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 0 24px;
+  color: #fff8ef;
+  text-align: center;
+  text-shadow: 0 2px 22px #000b;
+  pointer-events: none;
+}
+
+.galaxy-detail-stage[data-sky='light'] .galaxy-detail-copy {
+  color: #2b2320;
+  text-shadow: 0 1px 18px #fbf7f0d9;
+}
+
+.galaxy-detail-copy h1 {
+  margin: 0 0 10px;
+  font: 600 clamp(2.2rem, 7vw, 4.4rem)/1 var(--galaxy-display);
+  letter-spacing: -0.01em;
+}
+
+.galaxy-detail-copy p {
+  max-width: 34ch;
+  margin: 0 auto;
+  font: 500 clamp(0.95rem, 2vw, 1.15rem)/1.45 var(--body);
+}
+
+/* The box and its colour rail side by side. */
+.galaxy-detail-body {
+  width: min(100%, 836px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.galaxy-detail-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  max-height: 58svh;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  border-radius: 28px;
+  background: #0d0a1f;
+  box-shadow: 0 28px 60px -34px #6d4a3caa;
+}
+
+.galaxy-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.galaxy-press-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Colour rail: a vertical column right of the box on desktop. */
+.color-rail {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+}
+
+.color-rail-swatch {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 220ms cubic-bezier(0.3, 1.9, 0.5, 1);
+}
+
+.color-rail-divider {
+  align-self: center;
+  width: 20px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--line);
+}
+
+.color-rail-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-rail-swatch[aria-checked='true'] {
+  border-color: var(--ink);
+  transform: scale(1.12);
+}
+
+.color-rail-swatch:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Phones: the rail becomes a row above the box. */
+@media (max-width: 639px) {
+  .galaxy-detail {
+    justify-content: flex-start;
+  }
+
+  .galaxy-detail-body {
+    flex-direction: column-reverse;
+  }
+
+  .galaxy-detail-stage {
+    width: 100%;
+  }
+
+  .color-rail {
+    flex-direction: row;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .color-rail-swatch {
+    width: 32px;
+    height: 32px;
+  }
+
+  .color-rail-divider {
+    width: 1.5px;
+    height: 20px;
+  }
+}
+
+.galaxy-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-box,
+  .color-rail-swatch {
+    transition: none;
+  }
+}
