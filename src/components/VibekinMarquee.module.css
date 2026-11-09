@@ -1,0 +1,82 @@
+.section {
+  padding: 56px 0 40px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.band {
+  width: 100%;
+  padding: 18px 0;
+  background: #1d1b2e;
+  overflow: hidden;
+}
+
+/* Two identical lists side by side; sliding by exactly half lands copy two where copy one started. */
+.track {
+  display: flex;
+  width: max-content;
+  animation: slide 45s linear infinite;
+}
+
+.band:hover .track {
+  animation-play-state: paused;
+}
+
+.list {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The gap sits after every phrase and icon, including the last one, so the seam matches. */
+.item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 40px;
+  padding-right: 40px;
+  color: #fbf7f0;
+  font: 500 22px/1.2 'Fredoka', system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .track {
+    animation-duration: 30s;
+  }
+
+  .item {
+    gap: 28px;
+    padding-right: 28px;
+    font-size: 18px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

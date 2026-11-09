@@ -9,6 +9,7 @@ import { Hero } from './hero/Hero'
 import { MOODS } from './hero/vibes'
 import { findAsset, studioHref } from './lib/registry'
 import { LibrarySection } from './library/LibrarySection'
+import { VibekinMarquee } from './components/VibekinMarquee'
 import { LightToggle } from './nav/LightToggle'
 import { Navbar } from './nav/Navbar'
 import { ThemeMenu } from './nav/ThemeMenu'
@@ -91,6 +92,7 @@ export function App() {
       <main>
         {/* The blobs live only in the hero; the library below is plain paper. */}
         <Hero moodId={moodId} onMoodChange={setMoodId} dim={dim} />
+        <VibekinMarquee />
         <LibrarySection />
       </main>
     )
