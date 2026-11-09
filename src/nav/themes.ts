@@ -27,11 +27,7 @@ export type ThemeGroup = {
  *   templates: [{ label: 'Matrix rain', href: '/library/coder/matrix-rain' }],
  */
 export const THEME_GROUPS: ThemeGroup[] = [
-  {
-    label: 'Aesthetic & Simple',
-    templates: [],
-    card: { href: '/ribbons', subtitle: '1 background', poster: 'WaveRibbons' },
-  },
+  { label: 'Aesthetic & Simple', templates: [] },
   { label: 'Coder', templates: [] },
   { label: 'Glitter', templates: [] },
   { label: 'Galaxy', templates: [], card: { href: '/galaxy', subtitle: `${GALAXY_COUNT} backgrounds`, poster: 'Aurora' } },

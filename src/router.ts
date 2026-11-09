@@ -38,11 +38,17 @@ export function navigate(to: string) {
     scrollToHash(url.hash)
     return
   }
-  if (samePage && url.hash === window.location.hash) return
-  window.history.pushState(null, '', url.pathname + url.hash)
+  if (samePage && url.hash === window.location.hash && url.search === window.location.search) return
+  window.history.pushState(null, '', url.pathname + url.search + url.hash)
   listeners.forEach((listener) => listener())
   if (url.hash) scrollToHash(url.hash, false)
   else window.scrollTo(0, 0)
+}
+
+/** Swaps the current address for another without a history entry, e.g. for an old URL that moved. */
+export function redirect(to: string) {
+  window.history.replaceState(null, '', to)
+  listeners.forEach((listener) => listener())
 }
 
 /** Use as an anchor's onClick so in-site links skip a full page load. Modified clicks still open new tabs. */

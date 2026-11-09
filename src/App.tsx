@@ -1,18 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { Studio } from './components/studio/Studio'
+import { StudioIndex } from './components/studio/StudioIndex'
 import { ConstellationPage } from './constellation/ConstellationPage'
-import { RibbonsPage } from './ribbons/RibbonsPage'
-import { DetailPage, NotFoundPage } from './galaxy/DetailPage'
 import { GalleryPage } from './galaxy/GalleryPage'
+import { NotFoundPage } from './galaxy/NotFoundPage'
+import { StarfallPage } from './starfall/StarfallPage'
 import { Hero } from './hero/Hero'
 import { MOODS } from './hero/vibes'
-import { GALAXY_ITEMS } from './lib/galaxy'
+import { findAsset, studioHref } from './lib/registry'
 import { LibrarySection } from './library/LibrarySection'
 import { LightToggle } from './nav/LightToggle'
 import { Navbar } from './nav/Navbar'
 import { ThemeMenu } from './nav/ThemeMenu'
-import { scrollToHash, usePath } from './router'
+import { redirect, scrollToHash, usePath } from './router'
 
 const THEME_COLORS = { dim: '#241d1a', bright: '#fbf7f0' }
+
+/**
+ * Old customise pages now live in the Studio, so there's one place to customise.
+ * This is a Vite single-page app, so the redirects happen here rather than in a server config.
+ */
+function movedTo(path: string): string | null {
+  const old = path.match(/^\/(?:galaxy|assets)\/([^/]+)$/)?.[1]
+  if (old && findAsset(old)) return studioHref(old)
+  if (path === '/ribbons') {
+    // Old share links used ?palette=; the Studio reads ?pal=.
+    const palette = new URLSearchParams(window.location.search).get('palette')
+    return studioHref('wave-ribbons') + (palette ? `?pal=${encodeURIComponent(palette)}` : '')
+  }
+  return null
+}
 
 export function App() {
   const path = usePath()
@@ -36,29 +53,39 @@ export function App() {
     if (window.location.hash) scrollToHash(window.location.hash, false)
   }, [])
 
-  const galaxyId = path.match(/^\/galaxy\/([^/]+)$/)?.[1]
-  const galaxyItem = galaxyId ? GALAXY_ITEMS.find((item) => item.id === galaxyId) : undefined
+  const moved = movedTo(path)
+  useLayoutEffect(() => {
+    if (moved) redirect(moved)
+  }, [moved])
+
+  const studioId = path.match(/^\/studio\/([^/]+)$/)?.[1]
+  const asset = studioId ? findAsset(studioId) : undefined
+  const unknown = Boolean(studioId && !asset) || /^\/(galaxy|assets)\/[^/]+$/.test(path)
 
   useEffect(() => {
-    document.title = galaxyItem
-      ? `${galaxyItem.name} · Galaxy · Vibekin`
-      : path === '/galaxy'
+    document.title = asset
+      ? `${asset.name} · Vibekin Studio`
+      : path === '/studio'
+        ? 'Vibekin Studio'
+        : path === '/galaxy'
         ? 'Galaxy · Vibekin'
         : path === '/constellation'
           ? 'Name Constellation · Vibekin'
-          : path === '/ribbons'
-            ? 'Wave Ribbons · Vibekin'
-        : galaxyId
-          ? 'Not found · Vibekin'
-          : 'Vibekin'
-  }, [path, galaxyId, galaxyItem])
+          : path === '/starfall'
+          ? 'Starfall · Vibekin'
+          : unknown
+            ? 'Not found · Vibekin'
+            : 'Vibekin'
+  }, [path, asset, unknown])
 
   let page
-  if (path === '/galaxy') page = <GalleryPage />
+  if (moved) page = null
+  else if (path === '/studio') page = <StudioIndex />
+  else if (path === '/galaxy') page = <GalleryPage />
   else if (path === '/constellation') page = <ConstellationPage />
-  else if (path === '/ribbons') page = <RibbonsPage />
-  else if (galaxyItem) page = <DetailPage key={galaxyItem.id} item={galaxyItem} />
-  else if (galaxyId) page = <NotFoundPage />
+  else if (path === '/starfall') page = <StarfallPage />
+  else if (asset) page = <Studio key={asset.id} asset={asset} />
+  else if (unknown) page = <NotFoundPage />
   else
     page = (
       <main>

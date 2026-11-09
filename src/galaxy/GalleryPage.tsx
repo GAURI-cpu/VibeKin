@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import type { JSX } from 'react'
+import type { JSX, ReactNode } from 'react'
 import { NameConstellationBackground } from '../backgrounds/NameConstellationBackground'
+import { StarfallBackground } from '../backgrounds/StarfallBackground'
 import { WaveRibbonsBackground } from '../backgrounds/WaveRibbonsBackground'
 import { makePoster, type PosterKey } from '../lib/posters'
 import { GALAXY_ITEMS, GALAXY_LINKS } from '../lib/galaxy'
+import { studioHref } from '../lib/registry'
 import { followLink } from '../router'
 import { GALAXY_COMPONENTS } from './backgrounds'
 import { SCENE_DEFAULTS, isSceneName, renderPoster } from './scenes'
@@ -21,6 +23,50 @@ const LINK_PREVIEWS: Record<string, { poster: PosterKey; sky: string; Live: () =
     sky: '#03050a',
     Live: () => <WaveRibbonsBackground className="galaxy-box-live" />,
   },
+  starfall: {
+    poster: 'Starfall',
+    sky: '#02030c',
+    Live: () => <StarfallBackground className="galaxy-box-live" />,
+  },
+}
+
+type CardProps = {
+  id: string
+  name: string
+  tag: string
+  href: string
+  sky?: string
+  poster?: string
+  live: ReactNode
+  onStart: (id: string) => void
+  onStop: (id: string) => void
+}
+
+/** One background: the card opens its page, and a separate "Open in Studio" button sits under it (links can't nest). */
+function Card({ id, name, tag, href, sky, poster, live, onStart, onStop }: CardProps) {
+  return (
+    <div
+      className="galaxy-box"
+      onPointerEnter={() => onStart(id)}
+      onPointerLeave={() => onStop(id)}
+      onFocus={() => onStart(id)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) onStop(id)
+      }}
+    >
+      <a className="galaxy-box-link" href={href} onClick={followLink}>
+        <span className="galaxy-box-preview" style={sky ? { background: sky } : undefined}>
+          {poster && <img src={poster} alt="" draggable={false} />}
+          {live}
+        </span>
+        <span className="galaxy-box-name">{name}</span>
+        <span className="galaxy-box-tag">{tag}</span>
+      </a>
+      <a className="galaxy-box-studio" href={studioHref(id)} onClick={followLink} aria-label={`Open ${name} in Studio`}>
+        Open in Studio
+      </a>
+    </div>
+  )
 }
 
 /** Live previews only where there is a real hover, and never with reduced motion. */
@@ -75,46 +121,35 @@ export function GalleryPage() {
           const Live = isSceneName(item.component) ? GALAXY_COMPONENTS[item.component] : null
           return (
             <li key={item.id}>
-              <a
-                className="galaxy-box"
-                href={`/galaxy/${item.id}`}
-                onClick={followLink}
-                onPointerEnter={() => start(item.id)}
-                onPointerLeave={() => stop(item.id)}
-                onFocus={() => start(item.id)}
-                onBlur={() => stop(item.id)}
-              >
-                <span className="galaxy-box-preview">
-                  {posters[item.id] && <img src={posters[item.id]} alt="" draggable={false} />}
-                  {Live && liveId === item.id && <Live className="galaxy-box-live" />}
-                </span>
-                <span className="galaxy-box-name">{item.name}</span>
-                <span className="galaxy-box-tag">{item.tag}</span>
-              </a>
+              <Card
+                id={item.id}
+                name={item.name}
+                tag={item.tag}
+                href={studioHref(item.id)}
+                poster={posters[item.id]}
+                live={Live && liveId === item.id ? <Live className="galaxy-box-live" /> : null}
+                onStart={start}
+                onStop={stop}
+              />
             </li>
           )
         })}
         {GALAXY_LINKS.map((link) => {
           const preview = LINK_PREVIEWS[link.id]
           return (
-          <li key={link.id}>
-            <a
-              className="galaxy-box"
-              href={link.href}
-              onClick={followLink}
-              onPointerEnter={() => start(link.id)}
-              onPointerLeave={() => stop(link.id)}
-              onFocus={() => start(link.id)}
-              onBlur={() => stop(link.id)}
-            >
-              <span className="galaxy-box-preview" style={preview ? { background: preview.sky } : undefined}>
-                {posters[link.id] && <img src={posters[link.id]} alt="" draggable={false} />}
-                {preview && liveId === link.id && <preview.Live />}
-              </span>
-              <span className="galaxy-box-name">{link.name}</span>
-              <span className="galaxy-box-tag">{link.tag}</span>
-            </a>
-          </li>
+            <li key={link.id}>
+              <Card
+                id={link.id}
+                name={link.name}
+                tag={link.tag}
+                href={link.href}
+                sky={preview?.sky}
+                poster={posters[link.id]}
+                live={preview && liveId === link.id ? <preview.Live /> : null}
+                onStart={start}
+                onStop={stop}
+              />
+            </li>
           )
         })}
       </ul>

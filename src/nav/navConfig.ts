@@ -28,7 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'Templates', href: '#templates', description: 'Full page layouts ready to restyle' },
     ],
   },
-  { label: 'Studio', href: '#studio' },
+  { label: 'Studio', href: '/studio' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'Contact', href: '#contact' },
 ]

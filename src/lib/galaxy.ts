@@ -73,7 +73,8 @@ export type GalaxyLink = { id: string; name: string; tag: string; href: string }
 
 export const GALAXY_LINKS: GalaxyLink[] = [
   { id: 'name-constellation', name: 'Name Constellation', tag: 'Interactive', href: '/constellation' },
-  { id: 'wave-ribbons', name: 'Wave Ribbons', tag: 'Aesthetic', href: '/ribbons' },
+  { id: 'wave-ribbons', name: 'Wave Ribbons', tag: 'Aesthetic', href: '/studio/wave-ribbons' },
+  { id: 'starfall', name: 'Starfall', tag: 'Dreamy', href: '/starfall' },
 ]
 
 export const GALAXY_COUNT = GALAXY_ITEMS.length + GALAXY_LINKS.length

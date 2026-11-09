@@ -1,0 +1,75 @@
+/* /starfall uses the shared medium-box layout from galaxy.css; these are only Starfall's extras. */
+
+/* The near-black sky shows while the canvases start up. */
+.starfall-stage {
+  background: #02030c;
+}
+
+/* A slightly stronger shadow keeps the words clear over the brightest clouds. */
+.starfall-copy {
+  color: #eef1ff;
+  text-shadow: 0 2px 34px rgba(0, 0, 0, 0.6), 0 0 2px rgba(0, 0, 0, 0.35);
+}
+
+.starfall-copy h1 {
+  max-width: 14ch;
+  margin-inline: auto;
+  letter-spacing: -0.03em;
+}
+
+.starfall-copy p {
+  color: #e2e6ff;
+}
+
+/* Two sliders in paper pills under the box. */
+.starfall-sliders {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  width: min(100%, 836px);
+}
+
+.starfall-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink-soft);
+  font: 500 0.88rem/1 var(--body);
+  white-space: nowrap;
+}
+
+.starfall-slider input {
+  width: clamp(110px, 22vw, 180px);
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+.starfall-slider input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media (max-width: 639px) {
+  .starfall-slider {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .starfall-slider input {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+/* Keeps "Open in Studio" on one line on phones. */
+.starfall-actions .press {
+  white-space: nowrap;
+}

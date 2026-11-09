@@ -237,6 +237,7 @@ export function Navbar({ moodId, onMoodChange }: NavbarProps) {
                 <a
                   className="nav-link"
                   href={item.href}
+                  onClick={followLink}
                   onPointerEnter={(event) => {
                     setOpenMenu(null)
                     moveIndicator(event.currentTarget.parentElement!)

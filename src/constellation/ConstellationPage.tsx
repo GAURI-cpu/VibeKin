@@ -69,6 +69,13 @@ export function ConstellationPage() {
         <button type="button" className="press press-paper" onClick={saveImage}>
           {flash === 'saved' ? 'Saved!' : 'Save as image'}
         </button>
+        <a
+          className="press press-paper galaxy-press-link"
+          href={`/studio/name-constellation?x_name=${encodeURIComponent(name.trim().slice(0, 14))}`}
+          onClick={followLink}
+        >
+          Open in Studio
+        </a>
       </div>
       <p className="galaxy-sr-only" aria-live="polite">
         {flash === 'copied'
