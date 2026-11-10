@@ -4,6 +4,9 @@ import { MOODS } from '../hero/vibes'
 import { GALAXY_ITEMS, GALAXY_PALETTES } from './galaxy'
 import { resolvePalette } from './studioSettings'
 import { STARFALL_PALETTES, STARFALL_PALETTE_IDS } from './starfallPalettes'
+import { ORBS_PALETTES, type GradientOrbsProps, type OrbsPaletteKey } from '../backgrounds/GradientOrbsBackground'
+import { SILK_PALETTES, type SilkFlowProps, type SilkPaletteKey } from '../backgrounds/SilkFlowBackground'
+import { INK_PALETTES, INK_PALETTE_IDS } from './inkPalettes'
 import { DEFAULT_RIBBON_PALETTE, RIBBON_PALETTES, RIBBON_PALETTE_IDS } from './ribbons'
 
 /* ---------- Studio types ---------- */
@@ -130,6 +133,23 @@ const starfallPalettes: Palette[] = STARFALL_PALETTE_IDS.map((id) => {
   return { id, label: p.label, bg: p.bg, colors: [...p.colors], rain: p.rain }
 })
 
+const inkPalettes: Palette[] = INK_PALETTE_IDS.map((id) => {
+  const p = INK_PALETTES[id]
+  return { id, label: p.label, bg: p.bg, colors: [...p.colors] }
+})
+
+const silkPalettes: Palette[] = (Object.keys(SILK_PALETTES) as SilkPaletteKey[]).map((id) => {
+  const p = SILK_PALETTES[id]
+  return { id, label: p.name, bg: p.base, colors: [...p.blobs] }
+})
+const isSilkKey = (id: string): id is SilkPaletteKey => Object.prototype.hasOwnProperty.call(SILK_PALETTES, id)
+
+const orbsPalettes: Palette[] = (Object.keys(ORBS_PALETTES) as OrbsPaletteKey[]).map((id) => {
+  const p = ORBS_PALETTES[id]
+  return { id, label: p.name, bg: p.a, colors: [p.a, p.b] }
+})
+const isOrbsKey = (id: string): id is OrbsPaletteKey => Object.prototype.hasOwnProperty.call(ORBS_PALETTES, id)
+
 /** A palette without its own rain colour (a photo palette) rains a pale version of its right glow. */
 function paleRain(hex: string | undefined) {
   const n = parseInt((hex ?? '#bfe6ff').replace('#', '').slice(0, 6), 16)
@@ -224,6 +244,68 @@ export const REGISTRY: AssetMeta[] = [
       intensity: s.intensity,
       detail: s.detail,
     }),
+  }),
+  defineAsset({
+    id: 'ink-bloom',
+    name: 'Ink Bloom',
+    vibe: 'Aesthetic',
+    description: 'A drop of ink slowly blooming through milky water.',
+    files: ['backgrounds/InkBloomBackground.tsx'],
+    componentName: 'InkBloomBackground',
+    importPath: '@/components/InkBloomBackground',
+    dependencies: [],
+    pro: false,
+    palettes: inkPalettes,
+    defaults: { intensity: 0.4, detail: 0.6, showText: true },
+    sliderLabels: { intensity: { min: 'Calm', max: 'Lively' }, detail: { min: 'Simple', max: 'Detailed' } },
+    load: () => import('../backgrounds/InkBloomBackground').then((m) => m.InkBloomBackground),
+    toProps: (s, p) => ({ background: p.bg, colors: [p.colors[0], p.colors[1]], intensity: s.intensity, detail: s.detail }),
+  }),
+  defineAsset({
+    id: 'silk-flow',
+    name: 'Silk Flow',
+    vibe: 'Aesthetic',
+    description: 'Soft blurred colour glows with fine flowing silk lines, very slow and calm.',
+    files: ['backgrounds/SilkFlowBackground.tsx'],
+    componentName: 'SilkFlowBackground',
+    importPath: '@/components/SilkFlowBackground',
+    dependencies: [],
+    pro: false,
+    palettes: silkPalettes,
+    defaults: { intensity: 0.5, detail: 0.5, showText: true },
+    extraControls: [{ kind: 'toggle', key: 'decorations', label: 'Decorations', default: true }],
+    load: () => import('../backgrounds/SilkFlowBackground').then((m) => m.SilkFlowBackground),
+    toProps: (s, p) => {
+      // A preset is just its key; a photo palette passes its own colours on top of Midnight.
+      const props: SilkFlowProps & StudioProps = { palette: isSilkKey(p.id) ? p.id : 'midnight' }
+      if (!isSilkKey(p.id)) Object.assign(props, { colors: p.colors, background: p.bg })
+      Object.assign(props, { intensity: s.intensity, detail: s.detail })
+      if (s.extras.decorations === false) props.decorations = false
+      return props
+    },
+  }),
+  defineAsset({
+    id: 'gradient-orbs',
+    name: 'Gradient Orbs',
+    vibe: 'Aesthetic',
+    description: 'A diagonal gradient with soft 3D spheres, small rings and twinkling dots.',
+    files: ['backgrounds/GradientOrbsBackground.tsx'],
+    componentName: 'GradientOrbsBackground',
+    importPath: '@/components/GradientOrbsBackground',
+    dependencies: [],
+    pro: false,
+    palettes: orbsPalettes,
+    defaults: { intensity: 0.5, detail: 0.5, showText: true },
+    extraControls: [{ kind: 'toggle', key: 'parallax', label: 'Parallax', default: true }],
+    load: () => import('../backgrounds/GradientOrbsBackground').then((m) => m.GradientOrbsBackground),
+    toProps: (s, p) => {
+      // A preset is just its key; custom (photo) colours go in as [from, to].
+      const props: GradientOrbsProps & StudioProps = { palette: isOrbsKey(p.id) ? p.id : 'twilight' }
+      if (!isOrbsKey(p.id)) props.colors = [p.colors[0], p.colors[1] ?? p.colors[0]]
+      Object.assign(props, { intensity: s.intensity, detail: s.detail })
+      if (s.extras.parallax === false) props.parallax = false
+      return props
+    },
   }),
   ...galaxyAssets,
 ]
